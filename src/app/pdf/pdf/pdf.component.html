@@ -1,0 +1,364 @@
+<div class="container py-3">
+  <div class="row">
+    <div class="col-4">
+      <div class=" mx-auto">
+        <img [src]="info.logo" style="width: 40%;">
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="text-center">
+       {{info.eps | uppercase}}
+       <br>
+       {{info.direccion | uppercase}} Tel. {{ info.telefono}} Nit: {{ info.nit}}
+       <br>
+       HISTORIAS CLINICA
+      </div>
+    </div>
+    <div class="col-4"></div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div>
+        Historia No: {{ info.noHistoria}}
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="text-center">
+       {{info.text1}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div>
+        Lugar de atención: {{ info.lugarAtencion}}
+      </div>
+    </div>
+    <div class="col-6">
+      <div>
+        Fecha de impresión: {{info.fechaImpresion}}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>Paciente: CC 1043437985 PEDRO LOPEZ ARAQUE</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Sexo: {{ paciente.sexo}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Fecha nacimiento: {{ paciente.fechaNacimiento}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Edad: {{ paciente.sexo}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Grupo sanguineo: {{ paciente.grupoSangre}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+    <div class="col-3">
+      <div>
+        Estado civil: {{ paciente.estadoCivil}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Lugar residencia: {{ paciente.lugarResidencia}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+    <div class="col-3">
+      <div>
+        Barrio: {{ paciente.barrio}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Dirección: {{ paciente.direccion}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+    <div class="col-3">
+      <div>
+        Telefono: {{ paciente.telefono}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        Grupo etnico: {{ paciente.etnia}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        Empresa/contrato: {{ paciente.empresa}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Cita No: {{ paciente.cita}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Tipo usuario: {{ paciente.tipoUsuario}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Tipo afiliado: {{ paciente.tipoAfiliado}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Estrato: {{ paciente.estrato}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        Fecha cita: {{ paciente.fechaCita}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Fecha atención: {{ paciente.fechaAtencion}}
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        Fecha salida: {{ paciente.fechaSalida}}
+      </div>
+    </div>
+    <div class="col-3">
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>MOT. CONSULTA / ENF.ACTUAL</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>Motivo consulta: </b> {{ consulta.motivo | uppercase}}
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>Enfermedad actual: </b> {{ consulta.enfermedad | uppercase}}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>TIPO DE SANGRE</b>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-4">
+      <div>
+        Hemoclasificación: {{ signos.hemoclasificacion}}
+      </div>
+    </div>
+    <div class="col-8">
+      <div>
+        RH: {{ signos.rh }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>SIGNOS VITALES</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        TA: {{ signos.ta }} mmHg
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        GLAS: {{ signos.glas }} puntos
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        FC: {{ signos.fc }} x min
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        PESO: {{ signos.peso }} kg
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3">
+      <div>
+        IMC: {{ signos.imc }} Kg/m2
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        SUP: {{ signos.sup }} m2
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        TAM: {{ signos.tam }} mmHg
+      </div>
+    </div>
+    <div class="col-3">
+      <div>
+        TALLA: {{ signos.talla }} cm
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>DIAGNOSTICOS</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>Diag. Ppal: </b> {{ diagnostico }}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>FORMULACION DE MEDICAMENTOS</b>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="--bs-gutter-x: 0;">
+    <table class="default">
+      <tr>
+        <th>Medicamento</th>
+        <th>Cantidad</th>
+        <th>Via de uso</th>
+        <th>Tiempo</th>
+        <th>Dosis</th>
+        <th>Frecuencia</th>
+      </tr>
+    </table>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>PROCEDIMIENTOS DIAGNOSTICOS</b>
+      </div>
+    </div>
+  </div>
+  <div class="row"  style="--bs-gutter-x: 0;">
+    <table class="default">
+      <tr>
+        <th>Num</th>
+        <th>Codigo cup</th>
+        <th>Procedimiento</th>
+        <th>Cant</th>
+      </tr>
+    </table>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>PLAN ESTUD., TRATAM. Y EVOLUCION</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+       {{ tratamiento }}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>PROFESIONAL</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>{{ profesional.nombre | uppercase}} </b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>Tarjeta profesional:  {{ profesional.tarjeta }} </b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <b>{{ profesional.cargo | uppercase}} </b>
+      </div>
+    </div>
+  </div>
+</div>
