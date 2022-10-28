@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { PdfService } from 'src/app/service/pdf.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-pdf',
@@ -14,53 +18,20 @@ export class PdfComponent implements OnInit {
     nit: "802023344-1",
     noHistoria: "124587845 - 1455555",
     lugarAtencion: "Promonorte Ips",
-    fechaImpresion: "2022-25-12 14:45:00",
+    fechaImpresion: new Date(),
     text1: "CitaSalud",
-    logo: "https://saludsocial.com.co/wp-content/uploads/2022/02/logo-salud-social-sin-isotipo.png",
+    logo: "https://www.previsalud.com.co/wp-content/uploads/2022/01/Previsalud-Logo-PNG.png",
   }
 
   paciente: any = {
-    sexo: "M",
-    fechaNacimiento: "-----",
-    edad: "64",
-    grupoSangre: "-----",
-    estadoCivil: "-----",
-    lugarResidencia: "-----",
-    barrio: "-----",
-    direccion: "Calle 23 # 23-35 Avenida 9 #",
-    telefono: "5834918",
-    etnia: "-----",
-    empresa: "-----",
-    cita: "1176407",
-    tipoUsuario: "-----",
-    tipoAfiliado: "-----",
-    estrato: "-----",
-    fechaCita: "-----",
-    fechaAtencion: "-----",
-    fechaSalida: "-----",
-  }
-
-  consulta: any = {
-    motivo: "control de rcv",
-    enfermedad: "SE ATIENDE LA CONSULTA PRESENCIAL UTILIZANDO (EP) ELEMENTOS DE PROTECCION PERSONAL COMPLETOS, INGRESA PACIENTES POR SUS PROPIOS MEDIOS - PARA CONTROL DEL RIESGO CARDIOVASCULAR - PACIENTE MASCULINO DE 64 AÑOS DE EDAD - CON ANTECEDENTES DE: DIABETES MELLITUS - ENFERMEDAD RENAL CRONICA - HIPERTENSION ARTERIAL - CARDIOMIOPATIA ISQUEMICA - NIEGA FIEBRE - NIEGA TOS - NIEGA DOLOR DE GARGANTA - NIEGA DISNEA - NIEGA CONGESTION NASAL - NIEGA DIFICULTAD RESPIRATORIA - NIEGA ALGUN CONTACTO CON UN CASO CONFIRMADO DE COVID 19 EN LOS ULTIMOS 14 DIAS - NIEGA ALGUN CONTACTO CON PERSONAS QUE HAYA VIAJADO AL EXTERIOR CON RIESGO DE COVID 19 EN LOS ULTIMOS 14 DIAS - REFIERE BUENA ADHERENCIA Y TOLERANCIA AL TRATAMIENTO FARMACOLOGICO - NIEGA SINTOMAS DE DESCOMPENSACION CARDIOVASCULAR ASOCIADA - NIEGA HOSPITALIZACIONES EN EL ULTIMO MES - NO TIENE EXAMENES PENDIENTE PARA REVISAR."
   }
 
   signos: any = {
-    hemoclasificacion: "-----",
-    rh: "-----",
-    ta: "-----",
-    glas: "-----",
-    fc: "-----",
-    peso: "-----",
-    imc: "-----",
-    sup: "-----",
-    tam: "-----",
-    talla: "-----",
   }
 
-  diagnostico: any = "E118 DIABETES MELLITUS NO INSULINO DEPENDIENTE CON COMPLICACIONS NO ESPECIFICADAS"
+  diagnostico: any;
 
-  tratamiento: any = "- ESTABLE - SIN MENCION DE COMPLICACION DE SUS PATOLOGIAS DE RCV. - PACIENTE NEGATIVO PARA SINTOMATOLOGIA RESPIRATORIA. - SE INDICA TRATAMIENTO POR TRES MESES. - PROXIMO CONTROL SEGUN PROGRAMA. - SE DAN RECOMENDACIONES SOBRE: HASITOS DE VIDA SALUDABLE, ALIMENTACION, REALIZAR EJERCICIO ACORDE A LA EDAD, LA IMPORTANCIA DE LA ADHERENCIA AL TRATAMIENTO, TOMA DE MEDICAMENTOS SEGUN FORMULA MEDICA, NO AUTOMEDICARSE. - SE INDICAN SIGNOS DE ALARMA SOBRE SUS PATOLOGIAS DE BASE: CEFALEA INTENSA, PERDIDA DE SIMETRIA FACIAL PERDIDA DE LA FUERZA, LENGUAJE INCOHERENTE, DOLOR EN EL PECHO EN DADO CASO ACUDIR INMEDIATAMENTE AL SERVICIO DE URGENCIAS. - SE DAN RECOMENDACIONES Y MEDIDAS PREVENTIVAS PARA EL CORONAVIRUS. AISLAMIENTO SOCIAL PREVENTIVO, USO DE TAPABOCAS, LAVADO DE MANOS RECURRENTE, ENTRE OTROS. - SE DAN SIGNOS DE ALARMA RESPIRATORIOS: SI PRESENTA FIEBRE, DIFICULTAD RESPIRATORIA, RESPIRACIÓN MÁS RÁPIDA, SI EL PECHO LE SUENA O LE DUELE AL RESPIRAR. SOMNOLENCIA, DETERIORO DEL ESTADO GENERAL EN FORMA RÁPIDA, ASISTIR AL SERVICIO DE URGENCIAS PARA ATENCION MÉDICA INMEDIATA - REFIERE ENTENDER Y ESTAR DE ACUERDO.";
+  tratamiento: any ;
 
   profesional: any = {
     nombre: "diego enrique pacativa luna",
@@ -68,9 +39,184 @@ export class PdfComponent implements OnInit {
     cargo: "profesional"
   }
 
-  constructor() { }
+  constructor(
+    private PdfService: PdfService,
+    private ruta: ActivatedRoute,
+    private router: Router,
+  ) { }
+
+  version: number = 0;
+  documento: number = 0;
+  cita_num: number = 0;
+  oid: number = 0;
+  loading: boolean = false;
+  dataPaciente: any;
 
   ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+    if(this.ruta.snapshot.params){
+      this.version = this.ruta.snapshot.params?.['version'];
+      this.documento = this.ruta.snapshot.params?.['documento'];
+      this.cita_num = this.ruta.snapshot.params?.['cita'];
+      this.oid = this.ruta.snapshot.params?.['oid'];
+    }
+
+    this.dataPaciente = {
+      documento: this.documento,
+      version: this.version,
+      num_cita: this.cita_num,
+      oid: this.oid
+    }
+
+    this.cargaPdf();
   }
 
+  cargaPdf() {
+    this.loading = true;
+    this.getDataUser();
+    this.getHistoria();
+    this.getDiagnosticos();
+    this.getFisico();
+    this.getAntecedentes();
+    this.getSignos();
+    this.getOrdenamientos();
+    this.getMedicamentos();
+    this.getIncapacidad();
+    this.loading = false;
+  }
+
+  getDataUser(){
+    this.PdfService.pacienteData(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.paciente = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  consulta: any;
+  getHistoria(){
+    this.PdfService.getHistoria(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.consulta = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  getDiagnosticos(){
+    this.PdfService.getDiagnosticos(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.diagnostico = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  fisico: any;
+  getFisico(){
+    this.PdfService.getFisico(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.fisico = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  antecedentes: any;
+  getAntecedentes(){
+    this.PdfService.getAntecedentes(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.antecedentes = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  getSignos(){
+    this.PdfService.getSignos(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.signos = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  ordenamientos: any;
+  getOrdenamientos(){
+    this.PdfService.getOrdenamientos(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.ordenamientos = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  medicamentos: any;
+  getMedicamentos(){
+    this.PdfService.getMedicamentos(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.medicamentos = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  incapacidad: any;
+  getIncapacidad(){
+    this.PdfService.getIncapacidad(this.dataPaciente).subscribe({
+      next: (req: any) => {
+        this.incapacidad = req.data;
+      },
+      error: (err: string) => {
+        console.log(err, 'error');
+      }
+    })
+  }
+
+  download() {
+    this.loading = true;
+    // Extraemos el
+    const DATA: any = document.getElementById('htmlData');
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 1
+    };
+    html2canvas(DATA, options).then((canvas) => {
+
+      const img = canvas.toDataURL('image/PNG');
+
+      // Add image Canvas to PDF
+      const bufferX = 15;
+      const bufferY = 15;
+      const imgProps = (doc as any).getImageProperties(img);
+      const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+      const pdfWidth2 = doc.internal.pageSize.getWidth() - 10 * bufferX;
+      const pdfHeight = (imgProps.height * pdfWidth2) / imgProps.width;
+      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      return doc;
+    }).then((docResult) => {
+      docResult.save(`HitoriaClinica${this.documento}_${this.cita_num}.pdf`);
+      this.loading = false;
+    });
+  }
 }

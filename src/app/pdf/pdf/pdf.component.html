@@ -1,4 +1,4 @@
-<div class="container py-3">
+<div id="htmlData" class="container py-3">
   <div class="row">
     <div class="col-4">
       <div class=" mx-auto">
@@ -36,7 +36,7 @@
     </div>
     <div class="col-6">
       <div>
-        Fecha de impresión: {{info.fechaImpresion}}
+        Fecha de impresión: {{info.fechaImpresion | date :'M/d/yy, h:mm a'}}
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
   <div class="row">
     <div class="col-12">
       <div>
-        <b>Paciente: CC 1043437985 PEDRO LOPEZ ARAQUE</b>
+        <b>Paciente: {{paciente.tipoDocumento }} {{ paciente.numeroDocumento}} {{ paciente.primerNombre}} {{ paciente.segundoApellido}} {{ paciente.primerApellido}} {{ paciente.segundoApellido}}</b>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
     </div>
     <div class="col-3">
       <div>
-        Fecha nacimiento: {{ paciente.fechaNacimiento}}
+        Fecha nacimiento: {{ paciente.fechaNacimiento | date :'M/d/yy, h:mm a'}}
       </div>
     </div>
     <div class="col-3">
@@ -132,7 +132,7 @@
   <div class="row">
     <div class="col-3">
       <div>
-        Cita No: {{ paciente.cita}}
+        Cita No: {{ consulta.num_cita}}
       </div>
     </div>
     <div class="col-3">
@@ -159,7 +159,7 @@
     </div>
     <div class="col-3">
       <div>
-        Fecha atención: {{ paciente.fechaAtencion}}
+        Fecha atención: {{ consulta.fecha_consulta | date :'M/d/yy, h:mm a'}}
       </div>
     </div>
     <div class="col-3">
@@ -181,7 +181,7 @@
   <div class="row">
     <div class="col-12">
       <div>
-        <b>Motivo consulta: </b> {{ consulta.motivo | uppercase}}
+        <b>Motivo consulta: </b> {{ consulta.motivo_consulta | uppercase}}
       </div>
     </div>
   </div>
@@ -189,7 +189,7 @@
   <div class="row">
     <div class="col-12">
       <div>
-        <b>Enfermedad actual: </b> {{ consulta.enfermedad | uppercase}}
+        <b>Enfermedad actual: </b> {{ consulta.enf_actual | uppercase}}
       </div>
     </div>
   </div>
@@ -221,46 +221,77 @@
     </div>
   </div>
   <div class="row">
+    <div *ngFor="let signo of signos" class="col-3">
+      {{signo.sigla }}: {{ signo.Valor ? signo.Valor : "----" }} {{signo.unidad}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>FISICO</b>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
     <div class="col-3">
       <div>
-        TA: {{ signos.ta }} mmHg
+        <b> Estado general: </b> {{ fisico.estadoGeneral ? fisico.estadoGeneral : "----" }}
       </div>
     </div>
     <div class="col-3">
       <div>
-        GLAS: {{ signos.glas }} puntos
+        <b> Fecha: </b> {{ fisico.fecha }}
       </div>
     </div>
-    <div class="col-3">
+  </div>
+  <div class="row mb-3">
+    <div class="col-4">
       <div>
-        FC: {{ signos.fc }} x min
+        <b> Abdomen: </b> {{ fisico.abdomen ? fisico.abdomen : "----" }}
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div>
-        PESO: {{ signos.peso }} kg
+        <b> Cabeza: </b> {{ fisico.cabeza ? fisico.cabeza : "----" }}
+      </div>
+    </div>
+    <div class="col-4">
+      <div>
+        <b> Ext. Inferior: </b> {{ fisico.extInferior ? fisico.extInferior : "----" }}
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-4">
+      <div>
+        <b> Ext. Superior: </b> {{ fisico.extSuperior ? fisico.extSuperior : "----" }}
+      </div>
+    </div>
+    <div class="col-4">
+      <div>
+        <b> Genitourinaria: </b> {{ fisico.genitourinaria ? fisico.genitourinaria : "----" }}
+      </div>
+    </div>
+    <div class="col-4">
+      <div>
+        <b> Piel: </b> {{ fisico.piel ? fisico.piel : "----" }}
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-3">
+    <div class="col-4">
       <div>
-        IMC: {{ signos.imc }} Kg/m2
+        <b> Reg. Lumbosacra: </b> {{ fisico.regLumbosacra ? fisico.regLumbosacra : "----" }}
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div>
-        SUP: {{ signos.sup }} m2
+        <b> Sistema nervioso: </b> {{ fisico.sisNerv ? fisico.sisNerv : "----" }}
       </div>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div>
-        TAM: {{ signos.tam }} mmHg
-      </div>
-    </div>
-    <div class="col-3">
-      <div>
-        TALLA: {{ signos.talla }} cm
+        <b> Torax: </b> {{ fisico.torax ? fisico.torax : "----" }}
       </div>
     </div>
   </div>
@@ -275,7 +306,7 @@
   <div class="row">
     <div class="col-12">
       <div>
-        <b>Diag. Ppal: </b> {{ diagnostico }}
+        <b>Diag. Ppal: </b> <div *ngFor="let dg of diagnostico" style="display: inline;"> {{dg.principal == 1 ? dg.diagnostico : ""}} </div>
       </div>
     </div>
   </div>
@@ -297,6 +328,14 @@
         <th>Dosis</th>
         <th>Frecuencia</th>
       </tr>
+      <tr *ngFor="let med of medicamentos">
+        <td>{{med.medicamento}}</td>
+        <td>{{med.cantidad}}</td>
+        <td>{{med.via}}</td>
+        <td>{{med.tiempo}}</td>
+        <td>{{med.dosis}}</td>
+        <td>{{med.frecuencia}}</td>
+      </tr>
     </table>
   </div>
   <hr>
@@ -310,10 +349,14 @@
   <div class="row"  style="--bs-gutter-x: 0;">
     <table class="default">
       <tr>
-        <th>Num</th>
         <th>Codigo cup</th>
         <th>Procedimiento</th>
         <th>Cant</th>
+      </tr>
+      <tr *ngFor="let ord of ordenamientos; index as a">
+        <td>{{ord.cod}}</td>
+        <td>{{ord.descripcion}}</td>
+        <td>{{ord.cantidad}}</td>
       </tr>
     </table>
   </div>
@@ -328,7 +371,57 @@
   <div class="row">
     <div class="col-12">
       <div>
-       {{ tratamiento }}
+       {{ consulta.plan }}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>ANTECEDENTES</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div *ngFor="let ant of antecedentes">
+        <b>Tipo: </b>  {{ant.Tipo}}
+        <br>
+        <b>Medico: </b>  {{ant.Medico}}
+        <br>
+        <b>Fecha: </b>  {{ant.Fecha | date :'M/d/yy, h:mm a'}}
+        <br>
+        <b>Detallle: </b>
+        <br>
+        {{ant.Detalle}}
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-6">
+      <div style="color: #1D83FF !important">
+        <b>INCAPACIDAD</b>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div *ngFor="let inc of incapacidad">
+        <b>Empresa: </b>  {{inc.empresa}}
+        <br>
+        <b>Tipo: </b>  {{inc.tipo}}
+        <br>
+        <b>Desde: </b>  {{inc.desde}}
+        <br>
+        <b>Hasta: </b>  {{inc.hasta}}
+        <br>
+        <b>Total días: </b>{{inc.totaldias}}
+        <br>
+        <b>Observación: </b>
+        <br>
+        {{inc.observacion}}
       </div>
     </div>
   </div>
@@ -361,4 +454,7 @@
       </div>
     </div>
   </div>
+</div>
+<div class="container">
+  <button class="btn btn-primary w-100 mb-3" (click)="download()">Descargar</button>
 </div>
